@@ -121,5 +121,18 @@ namespace BookDatabaseAPI.Controllers
         {
             return _context.BookItem.Any(e => e.Id == id);
         }
+
+        // GET: api/Book/Tags
+        [Route("tags")]
+        [HttpGet]
+        public async Task<List<string>> GetTags()
+        {
+            var memes = (from m in _context.BookItem
+                         select m.Tags).Distinct();
+
+            var returned = await memes.ToListAsync();
+
+            return returned;
+        }
     }
 }
