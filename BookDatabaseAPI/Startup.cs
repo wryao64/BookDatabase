@@ -30,7 +30,7 @@ namespace BookDatabaseAPI
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<BookDatabaseAPIContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("BookDatabaseAPIContext")));
+                    options.UseSqlite(Configuration.GetConnectionString("BookDatabaseAPIContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
