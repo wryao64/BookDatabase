@@ -28,6 +28,12 @@ export default class MemeDetail extends React.Component<IProps, IState> {
                 <div className="row meme-heading">
                     <b>{currentMeme.title}</b>&nbsp; ({currentMeme.tags})
                 </div>
+                <div className="row meme-author">
+                    <b>{currentMeme.author}</b>
+                </div>
+                <div className="row meme-synopsis">
+                    <b>{currentMeme.synopsis}</b>
+                </div>
                 <div className="row meme-date">
                     {currentMeme.uploaded}
                 </div>
@@ -76,7 +82,7 @@ export default class MemeDetail extends React.Component<IProps, IState> {
 
     // DELETE meme
     private deleteMeme(id: any) {
-        const url = "http://phase2apitest.azurewebsites.net/api/meme/" + id
+        const url = "http://wybookdatabase.azurewebsites.net/api/Book/" + id
 
 		fetch(url, {
 			method: 'DELETE'
@@ -102,7 +108,7 @@ export default class MemeDetail extends React.Component<IProps, IState> {
 		}
 
         const currentMeme = this.props.currentMeme
-        const url = "http://phase2apitest.azurewebsites.net/api/meme/" + currentMeme.id
+        const url = "http://wybookdatabase.azurewebsites.net/api/Book/" + currentMeme.id
         const updatedTitle = titleInput.value
         const updatedTag = tagInput.value
 		fetch(url, {

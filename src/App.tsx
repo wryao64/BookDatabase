@@ -17,7 +17,7 @@ class App extends React.Component<{}, IState> {
 	constructor(props: any) {
         super(props)
         this.state = {
-			currentMeme: {"id":0, "title":"Loading ","url":"","tags":"⚆ _ ⚆","uploaded":"","width":"0","height":"0"},
+			currentMeme: {"id":0, "title":"Loading ","url":"", "author":"Unknown", "synopsis":"Unavailable", "tags":"⚆ _ ⚆","uploaded":"","width":"0","height":"0"},
 			memes: [],
 			open: false,
 			uploadFileList: null
@@ -37,8 +37,8 @@ class App extends React.Component<{}, IState> {
 		<div>
 			<div className="header-wrapper">
 				<div className="container header">
-					<img src={PatrickLogo} height='40'/>&nbsp; My Meme Bank - MSA 2018 &nbsp;
-					<div className="btn btn-primary btn-action btn-add" onClick={this.onOpenModal}>Add Meme</div>
+					<img src={PatrickLogo} height='40'/>&nbsp; My Book Database &nbsp;
+					<div className="btn btn-primary btn-action btn-add" onClick={this.onOpenModal}>Add Book</div>
 				</div>
 			</div>
 			<div className="container">
@@ -56,7 +56,17 @@ class App extends React.Component<{}, IState> {
 					<div className="form-group">
 						<label>Meme Title</label>
 						<input type="text" className="form-control" id="meme-title-input" placeholder="Enter Title" />
-						<small className="form-text text-muted">You can edit any meme later</small>
+						<small className="form-text text-muted">You can edit any book later</small>
+					</div>
+					<div className="form-group">
+						<label>Author</label>
+						<input type="text" className="form-control" id="meme-author-input" placeholder="Enter Author" />
+						{/* <small className="form-text text-muted"></small> */}
+					</div>
+					<div className="form-group">
+						<label>Synopsis</label>
+						<input type="text" className="form-control" id="meme-synopsis-input" placeholder="Enter Synopsis" />
+						{/* <small className="form-text text-muted"></small> */}
 					</div>
 					<div className="form-group">
 						<label>Tag</label>
@@ -94,7 +104,7 @@ class App extends React.Component<{}, IState> {
 
 	// GET memes
 	private fetchMemes(tag: any) {
-		let url = "http://phase2apitest.azurewebsites.net/api/meme"
+		let url = "https://wybookdatabase.azurewebsites.net/api/Book"
 		if (tag !== "") {
 			url += "/tag?=" + tag
 		}
@@ -105,7 +115,7 @@ class App extends React.Component<{}, IState> {
         .then(json => {
 			let currentMeme = json[0]
 			if (currentMeme === undefined) {
-				currentMeme = {"id":0, "title":"No memes (╯°□°）╯︵ ┻━┻","url":"","tags":"try a different tag","uploaded":"","width":"0","height":"0"}
+				currentMeme = {"id":0, "title":"No memes (╯°□°）╯︵ ┻━┻","url":"", "author":"Unknown", "synopsis":"Unavailable", "tags":"try a different tag","uploaded":"","width":"0","height":"0"}
 			}
 			this.setState({
 				currentMeme,
@@ -133,7 +143,7 @@ class App extends React.Component<{}, IState> {
 
 		const title = titleInput.value
 		const tag = tagInput.value
-		const url = "http://phase2apitest.azurewebsites.net/api/meme/upload"
+		const url = "https://wybookdatabase.azurewebsites.net/api/Book/upload"
 
 		const formData = new FormData()
 		formData.append("Title", title)
