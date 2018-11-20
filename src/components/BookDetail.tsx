@@ -108,20 +108,32 @@ export default class BookDetail extends React.Component<IProps, IState> {
     // PUT book
     private updateBook(){
         const titleInput = document.getElementById("book-edit-title-input") as HTMLInputElement
+        const authorInput = document.getElementById("book-edit-author-input") as HTMLInputElement
+		const synopsisInput = document.getElementById("book-edit-synopsis-input") as HTMLInputElement
         const tagInput = document.getElementById("book-edit-tag-input") as HTMLInputElement
 
-        if (titleInput === null || tagInput === null) {
-			return;
+        console.log(titleInput)
+        console.log(authorInput)
+        console.log(synopsisInput)
+        console.log(tagInput)
+
+        if (titleInput === null || authorInput === null || synopsisInput === null || tagInput === null) {
+            console.log("Null")
+            return;
 		}
 
         const currentBook = this.props.currentBook
         const url = "https://cors-anywhere.herokuapp.com/http://wybookdatabase.azurewebsites.net/api/Book/" + currentBook.id
         const updatedTitle = titleInput.value
+        const updatedAuthor = authorInput.value
+        const updatedSynopsis = synopsisInput.value
         const updatedTag = tagInput.value
 		fetch(url, {
 			body: JSON.stringify({
+                "author": updatedAuthor,
                 "height": currentBook.height,
                 "id": currentBook.id,
+                "synopsis": updatedSynopsis,
                 "tags": updatedTag,
                 "title": updatedTitle,
                 "uploaded": currentBook.uploaded,
@@ -132,6 +144,7 @@ export default class BookDetail extends React.Component<IProps, IState> {
 			method: 'PUT'
 		})
         .then((response : any) => {
+            console.log("updateBook response?")
 			if (!response.ok) {
 				// Error State
 				alert(response.statusText + " " + url)
