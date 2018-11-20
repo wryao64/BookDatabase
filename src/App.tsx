@@ -134,19 +134,25 @@ class App extends React.Component<{}, IState> {
 	// POST book
 	private uploadBook() {
 		const titleInput = document.getElementById("book-title-input") as HTMLInputElement
+		const authorInput = document.getElementById("book-author-input") as HTMLInputElement
+		const synopsisInput = document.getElementById("book-synopsis-input") as HTMLInputElement
 		const tagInput = document.getElementById("book-tag-input") as HTMLInputElement
 		const imageFile = this.state.uploadFileList[0]
 
-		if (titleInput === null || tagInput === null || imageFile === null) {
+		if (titleInput === null || authorInput === null || synopsisInput === null || tagInput === null || imageFile === null) {
 			return;
 		}
 
 		const title = titleInput.value
+		const author = authorInput.value
+		const synopsis = synopsisInput.value
 		const tag = tagInput.value
 		const url = "https://wybookdatabase.azurewebsites.net/api/Book/upload"
 
 		const formData = new FormData()
 		formData.append("Title", title)
+		formData.append("Author", author)
+		formData.append("Synopsis", synopsis)
 		formData.append("Tags", tag)
 		formData.append("image", imageFile)
 
