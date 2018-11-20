@@ -1,14 +1,14 @@
 import * as React from 'react';
 import Modal from 'react-responsive-modal';
 import './App.css';
-import MemeDetail from './components/MemeDetail';
-import MemeList from './components/MemeList';
+import BookDetail from './components/BookDetail';
+import BookList from './components/BookList';
 import PatrickLogo from './patrick-logo.png';
 
 
 interface IState {
-	currentMeme: any,
-	memes: any[],
+	books: any[],
+	currentBook: any,
 	open: boolean,
 	uploadFileList: any,
 }
@@ -17,17 +17,17 @@ class App extends React.Component<{}, IState> {
 	constructor(props: any) {
         super(props)
         this.state = {
-			currentMeme: {"id":0, "title":"Loading ","url":"", "author":"Unknown", "synopsis":"Unavailable", "tags":"⚆ _ ⚆","uploaded":"","width":"0","height":"0"},
-			memes: [],
+			books: [],
+			currentBook: {"id":0, "title":"Loading ","url":"", "author":"Unknown", "synopsis":"Unavailable", "tags":"⚆ _ ⚆","uploaded":"","width":"0","height":"0"},
 			open: false,
 			uploadFileList: null
 		}     
 		
-		this.fetchMemes("")
-		this.selectNewMeme = this.selectNewMeme.bind(this)
+		this.fetchBooks("")
+		this.selectNewBook = this.selectNewBook.bind(this)
 		this.handleFileUpload = this.handleFileUpload.bind(this)
-		this.fetchMemes = this.fetchMemes.bind(this)
-		this.uploadMeme = this.uploadMeme.bind(this)
+		this.fetchBooks = this.fetchBooks.bind(this)
+		this.uploadBook = this.uploadBook.bind(this)
 		
 	}
 
@@ -44,41 +44,41 @@ class App extends React.Component<{}, IState> {
 			<div className="container">
 				<div className="row">
 					<div className="col-7">
-						<MemeDetail currentMeme={this.state.currentMeme} />
+						<BookDetail currentBook={this.state.currentBook} />
 					</div>
 					<div className="col-5">
-						<MemeList memes={this.state.memes} selectNewMeme={this.selectNewMeme} searchByTag={this.fetchMemes}/>
+						<BookList books={this.state.books} selectNewBook={this.selectNewBook} searchByTag={this.fetchBooks}/>
 					</div>
 				</div>
 			</div>
 			<Modal open={open} onClose={this.onCloseModal}>
 				<form>
 					<div className="form-group">
-						<label>Meme Title</label>
-						<input type="text" className="form-control" id="meme-title-input" placeholder="Enter Title" />
+						<label>Book Title</label>
+						<input type="text" className="form-control" id="book-title-input" placeholder="Enter Title" />
 						<small className="form-text text-muted">You can edit any book later</small>
 					</div>
 					<div className="form-group">
 						<label>Author</label>
-						<input type="text" className="form-control" id="meme-author-input" placeholder="Enter Author" />
+						<input type="text" className="form-control" id="book-author-input" placeholder="Enter Author" />
 						{/* <small className="form-text text-muted"></small> */}
 					</div>
 					<div className="form-group">
 						<label>Synopsis</label>
-						<input type="text" className="form-control" id="meme-synopsis-input" placeholder="Enter Synopsis" />
+						<input type="text" className="form-control" id="book-synopsis-input" placeholder="Enter Synopsis" />
 						{/* <small className="form-text text-muted"></small> */}
 					</div>
 					<div className="form-group">
 						<label>Tag</label>
-						<input type="text" className="form-control" id="meme-tag-input" placeholder="Enter Tag" />
+						<input type="text" className="form-control" id="book-tag-input" placeholder="Enter Tag" />
 						<small className="form-text text-muted">Tag is used for search</small>
 					</div>
 					<div className="form-group">
 						<label>Image</label>
-						<input type="file" onChange={this.handleFileUpload} className="form-control-file" id="meme-image-input" />
+						<input type="file" onChange={this.handleFileUpload} className="form-control-file" id="book-image-input" />
 					</div>
 
-					<button type="button" className="btn" onClick={this.uploadMeme}>Upload</button>
+					<button type="button" className="btn" onClick={this.uploadBook}>Upload</button>
 				</form>
 			</Modal>
 		</div>
@@ -95,15 +95,15 @@ class App extends React.Component<{}, IState> {
 		this.setState({ open: false });
 	};
 	
-	// Change selected meme
-	private selectNewMeme(newMeme: any) {
+	// Change selected book
+	private selectNewBook(newBook: any) {
 		this.setState({
-			currentMeme: newMeme
+			currentBook: newBook
 		})
 	}
 
-	// GET memes
-	private fetchMemes(tag: any) {
+	// GET books
+	private fetchBooks(tag: any) {
 		let url = "https://wybookdatabase.azurewebsites.net/api/Book"
 		if (tag !== "") {
 			url += "/tag?=" + tag
@@ -113,13 +113,13 @@ class App extends React.Component<{}, IState> {
         })
         .then(res => res.json())
         .then(json => {
-			let currentMeme = json[0]
-			if (currentMeme === undefined) {
-				currentMeme = {"id":0, "title":"No memes (╯°□°）╯︵ ┻━┻","url":"", "author":"Unknown", "synopsis":"Unavailable", "tags":"try a different tag","uploaded":"","width":"0","height":"0"}
+			let currentBook = json[0]
+			if (currentBook === undefined) {
+				currentBook = {"id":0, "title":"No books (╯°□°）╯︵ ┻━┻","url":"", "author":"Unknown", "synopsis":"Unavailable", "tags":"try a different tag","uploaded":"","width":"0","height":"0"}
 			}
 			this.setState({
-				currentMeme,
-				memes: json
+				books: json,
+				currentBook
 			})
         });
 	}
@@ -131,10 +131,10 @@ class App extends React.Component<{}, IState> {
 		})
 	}
 
-	// POST meme
-	private uploadMeme() {
-		const titleInput = document.getElementById("meme-title-input") as HTMLInputElement
-		const tagInput = document.getElementById("meme-tag-input") as HTMLInputElement
+	// POST book
+	private uploadBook() {
+		const titleInput = document.getElementById("book-title-input") as HTMLInputElement
+		const tagInput = document.getElementById("book-tag-input") as HTMLInputElement
 		const imageFile = this.state.uploadFileList[0]
 
 		if (titleInput === null || tagInput === null || imageFile === null) {
