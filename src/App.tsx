@@ -147,7 +147,7 @@ class App extends React.Component<{}, IState> {
 		const author = authorInput.value
 		const synopsis = synopsisInput.value
 		const tag = tagInput.value
-		const url = "https://wybookdatabase.azurewebsites.net/api/Book/upload"
+		const url = "https://cors-anywhere.herokuapp.com/https://wybookdatabase.azurewebsites.net/api/Book/upload"
 
 		const formData = new FormData()
 		formData.append("Title", title)

@@ -89,7 +89,7 @@ export default class BookDetail extends React.Component<IProps, IState> {
 
     // DELETE book
     private deleteBook(id: any) {
-        const url = "http://wybookdatabase.azurewebsites.net/api/Book/" + id
+        const url = "https://cors-anywhere.herokuapp.com/http://wybookdatabase.azurewebsites.net/api/Book/" + id
 
 		fetch(url, {
 			method: 'DELETE'
@@ -115,7 +115,7 @@ export default class BookDetail extends React.Component<IProps, IState> {
 		}
 
         const currentBook = this.props.currentBook
-        const url = "http://wybookdatabase.azurewebsites.net/api/Book/" + currentBook.id
+        const url = "https://cors-anywhere.herokuapp.com/http://wybookdatabase.azurewebsites.net/api/Book/" + currentBook.id
         const updatedTitle = titleInput.value
         const updatedTag = tagInput.value
 		fetch(url, {
