@@ -16,7 +16,6 @@ export default class BookDetail extends React.Component<IProps, IState> {
         this.state = {
             open: false
         }
-
         this.updateBook = this.updateBook.bind(this)
     }
 
@@ -54,6 +53,14 @@ export default class BookDetail extends React.Component<IProps, IState> {
                             <small className="form-text text-muted">You can edit any book later</small>
                         </div>
                         <div className="form-group">
+                            <label>Author</label>
+                            <input type="text" className="form-control" id="book-edit-author-input" placeholder="Enter Author"/>
+                        </div>
+                        <div className="form-group">
+                            <label>Synopsis</label>
+                            <input type="text" className="form-control" id="book-edit-synopsis-input" placeholder="Enter Synopsis"/>
+                        </div>
+                        <div className="form-group">
                             <label>Tag</label>
                             <input type="text" className="form-control" id="book-edit-tag-input" placeholder="Enter Tag"/>
                             <small className="form-text text-muted">Tag is used for search</small>
@@ -89,7 +96,7 @@ export default class BookDetail extends React.Component<IProps, IState> {
 		})
         .then((response : any) => {
 			if (!response.ok) {
-				// Error Response
+                // Error Response
 				alert(response.statusText)
 			}
 			else {
