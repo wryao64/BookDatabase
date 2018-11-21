@@ -13,6 +13,7 @@ interface IState {
 	open: boolean,
 	refCamera: any
 	uploadFileList: any,
+	predictionResult: any,
 }
 
 class App extends React.Component<{}, IState> {
@@ -25,6 +26,7 @@ class App extends React.Component<{}, IState> {
 			open: false,
 			refCamera: React.createRef(),
 			uploadFileList: null,
+			predictionResult: null,
 		}     
 		
 		this.fetchBooks("")
@@ -192,7 +194,42 @@ class App extends React.Component<{}, IState> {
 
 	// Authenticate
 	private authenticate() { 
-		// const screenshot = this.state.refCamera.current.getScreenshot();
+		const screenshot = this.state.refCamera.current.getScreenshot();
+		this.getFaceRecognitionResult(screenshot);
+	}
+
+	// Call custom vision model
+	private getFaceRecognitionResult(image: string) {
+		const url = "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/fd849982-e2f2-4fe7-a8d9-94c0d78fed33/image?iterationId=e6b960fa-4ea5-42dc-9f7d-df3b64bb8c2e"
+		if (image === null) {
+			return;
+		}
+		const base64 = require('base64-js');
+		const base64content = image.split(";")[1].split(",")[1]
+		const byteArray = base64.toByteArray(base64content);
+		fetch(url, {
+			body: byteArray,
+			headers: {
+				'cache-control': 'no-cache', 'Prediction-Key': '238994037e3e4ebabe32c0093e59d168', 'Content-Type': 'application/octet-stream'
+			},
+			method: 'POST'
+		})
+			.then((response: any) => {
+				if (!response.ok) {
+					// Error State
+					alert(response.statusText)
+				} else {
+					response.json().then((json: any) => {
+						console.log(json.predictions[0])
+						this.setState({predictionResult: json.predictions[0] })
+						if (this.state.predictionResult.probability > 0.7) {
+							this.setState({authenticated: true})
+						} else {
+							this.setState({authenticated: false})
+						}
+					})
+				}
+			})
 	}
 }
 
