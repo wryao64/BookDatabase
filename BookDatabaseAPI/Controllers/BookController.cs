@@ -130,14 +130,21 @@ namespace BookDatabaseAPI.Controllers
         }
 
         // GET: api/Book/Tags
-        [Route("tags")]
-        [HttpGet]
-        public async Task<List<string>> GetTags()
-        {
-            var books = (from b in _context.BookItem
-                         select b.Tags).Distinct();
 
-            var returned = await books.ToListAsync();
+        [HttpGet]
+        [Route("tag")]
+        public async Task<List<BookItem>> GetTagsItem([FromQuery] string tags)
+        {
+            var memes = from m in _context.BookItem
+                        select m; //get all the memes
+
+
+            if (!String.IsNullOrEmpty(tags)) //make sure user gave a tag to search
+            {
+                memes = memes.Where(s => s.Tags.ToLower().Equals(tags.ToLower())); // find the entries with the search tag and reassign
+            }
+
+            var returned = await memes.ToListAsync(); //return the memes
 
             return returned;
         }
