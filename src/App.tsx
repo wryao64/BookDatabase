@@ -6,6 +6,7 @@ import BookList from './components/BookList';
 import BookLogo from './bookIcon.png';
 // import * as Webcam from 'react-webcam';
 import FacebookLogin from 'react-facebook-login';
+import GoogleLogin from 'react-google-login';
 
 interface IState {
 	authenticated: boolean,
@@ -38,6 +39,7 @@ class App extends React.Component<{}, IState> {
 		this.authenticate = this.authenticate.bind(this)	
 		this.responseFacebook = this.responseFacebook.bind(this)
 		this.facebookLoginClicked = this.facebookLoginClicked.bind(this)
+		this.responseGoogle = this.responseGoogle.bind(this)
 	}
 
 	public render() {
@@ -73,6 +75,12 @@ class App extends React.Component<{}, IState> {
 							onClick={this.facebookLoginClicked}
 							// callback={this.responseFacebook}
 							/>
+						<GoogleLogin
+							clientId="134185819144-0pg827n4l0hdi9vmj70roacbiik8hf0o.apps.googleusercontent.com"
+							buttonText="Login"
+							onSuccess={this.responseGoogle}
+							onFailure={this.responseGoogle}
+ 							/>
 					</div>
 					<h1>Login</h1>
 				</div>
@@ -269,6 +277,10 @@ class App extends React.Component<{}, IState> {
 
 	private facebookLoginClicked(response: any) {
 		this.responseFacebook(response);
+	}
+
+	private responseGoogle = (response: any) => {
+		console.log(response);
 	}
 }
 
