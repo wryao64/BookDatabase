@@ -4,7 +4,7 @@ import './App.css';
 import BookDetail from './components/BookDetail';
 import BookList from './components/BookList';
 import PatrickLogo from './patrick-logo.png';
-import * as Webcam from "react-webcam";
+// import * as Webcam from 'react-webcam';
 
 interface IState {
 	authenticated: boolean,
@@ -41,7 +41,7 @@ class App extends React.Component<{}, IState> {
 		const { open } = this.state;
 		return (
 		<div>
-			{(!this.state.authenticated) ?
+			{/* {(!this.state.authenticated) ?
 				<Modal open={!this.state.authenticated} onClose={this.authenticate} closeOnOverlayClick={false} showCloseIcon={false} center={true}>
 					<Webcam
 						audio={false}
@@ -51,8 +51,8 @@ class App extends React.Component<{}, IState> {
 					<div className="row nav-row">
 						<div className="btn btn-primary bottom-button" onClick={this.authenticate}>Login</div>
 					</div>
-				</Modal> : ""}
-			{(this.state.authenticated) ?
+				</Modal> : ""} */}
+			{(!this.state.authenticated) ?
 			<div>
 				<div className="header-wrapper">
 					<div className="container header">
