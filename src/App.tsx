@@ -5,6 +5,10 @@ import BookDetail from './components/BookDetail';
 import BookList from './components/BookList';
 import BookLogo from './bookIcon.png';
 // import * as Webcam from 'react-webcam';
+import FacebookLogin from 'react-facebook-login';
+import GoogleLogin from 'react-google-login';
+import Card from '@material-ui/core/Card';
+import { CardContent } from '@material-ui/core';
 
 interface IState {
 	authenticated: boolean,
@@ -34,7 +38,10 @@ class App extends React.Component<{}, IState> {
 		this.handleFileUpload = this.handleFileUpload.bind(this)
 		this.fetchBooks = this.fetchBooks.bind(this)
 		this.uploadBook = this.uploadBook.bind(this)
-		this.authenticate = this.authenticate.bind(this)		
+		this.authenticate = this.authenticate.bind(this)	
+		this.responseFacebook = this.responseFacebook.bind(this)
+		this.facebookLoginClicked = this.facebookLoginClicked.bind(this)
+		this.responseGoogle = this.responseGoogle.bind(this)
 	}
 
 	public render() {
@@ -52,7 +59,43 @@ class App extends React.Component<{}, IState> {
 						<div className="btn btn-primary bottom-button" onClick={this.authenticate}>Login</div>
 					</div>
 				</Modal> : ""} */}
+
+			{/* If the user has not been authenticated */}
 			{(!this.state.authenticated) ?
+				<div>
+					<div className="header-wrapper">
+						<div className="container header">
+							<img src={BookLogo} height='40'/>&nbsp; My Book Database &nbsp;
+						</div>
+					</div>
+					<div>
+						<Card className="card">
+							<CardContent>
+								<h3>Login with one of the following:</h3>
+							</CardContent>
+							<FacebookLogin 
+								className="fb-login"
+								id="facebook-login"
+								appId="2196561480662008"
+								autoLoad={true}
+								fields="name,email,picture"
+								onClick={this.facebookLoginClicked}
+								// callback={this.responseFacebook}
+								/>
+							<GoogleLogin
+								className="google-login"
+								clientId="134185819144-0pg827n4l0hdi9vmj70roacbiik8hf0o.apps.googleusercontent.com"
+								buttonText="Login"
+								onSuccess={this.responseGoogle}
+								onFailure={this.responseGoogle}
+								/>
+						</Card>
+					</div>
+				</div>
+				: ""}
+
+			{/* If the user has been authenticated */}
+			{(this.state.authenticated) ?
 			<div>
 				<div className="header-wrapper">
 					<div className="container header">
@@ -214,22 +257,37 @@ class App extends React.Component<{}, IState> {
 			},
 			method: 'POST'
 		})
-			.then((response: any) => {
-				if (!response.ok) {
-					// Error State
-					alert(response.statusText)
-				} else {
-					response.json().then((json: any) => {
-						console.log(json.predictions[0])
-						this.setState({predictionResult: json.predictions[0] })
-						if (this.state.predictionResult.probability > 0.7) {
-							this.setState({authenticated: true})
-						} else {
-							this.setState({authenticated: false})
-						}
-					})
-				}
-			})
+		.then((response: any) => {
+			if (!response.ok) {
+				// Error State
+				alert(response.statusText)
+			} else {
+				response.json().then((json: any) => {
+					console.log(json.predictions[0])
+					this.setState({predictionResult: json.predictions[0] })
+					if (this.state.predictionResult.probability > 0.7) {
+						this.setState({authenticated: true})
+					} else {
+						this.setState({authenticated: false})
+					}
+				})
+			}
+		})
+	}
+
+	private responseFacebook = (response: any) => {
+		console.log(response);
+		if (!(response.name === "")) { // assumes user has logged in if there is a name
+			this.setState({authenticated: true})
+		}
+	}
+
+	private facebookLoginClicked(response: any) {
+		this.responseFacebook(response);
+	}
+
+	private responseGoogle = (response: any) => {
+		console.log(response);
 	}
 }
 
