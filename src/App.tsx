@@ -3,7 +3,7 @@ import Modal from 'react-responsive-modal';
 import './App.css';
 import BookDetail from './components/BookDetail';
 import BookList from './components/BookList';
-import PatrickLogo from './patrick-logo.png';
+import BookLogo from './bookIcon.png';
 // import * as Webcam from 'react-webcam';
 
 interface IState {
@@ -56,7 +56,7 @@ class App extends React.Component<{}, IState> {
 			<div>
 				<div className="header-wrapper">
 					<div className="container header">
-						<img src={PatrickLogo} height='40'/>&nbsp; My Book Database &nbsp;
+						<img src={BookLogo} height='40'/>&nbsp; My Book Database &nbsp;
 						<div className="btn btn-primary btn-action btn-add" onClick={this.onOpenModal}>Add Book</div>
 					</div>
 				</div>
