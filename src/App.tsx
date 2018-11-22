@@ -7,6 +7,8 @@ import BookLogo from './bookIcon.png';
 // import * as Webcam from 'react-webcam';
 import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
+import Card from '@material-ui/core/Card';
+import { CardContent } from '@material-ui/core';
 
 interface IState {
 	authenticated: boolean,
@@ -67,22 +69,28 @@ class App extends React.Component<{}, IState> {
 						</div>
 					</div>
 					<div>
-						<FacebookLogin 
-							id="facebook-login"
-							appId="2196561480662008"
-							autoLoad={true}
-							fields="name,email,picture"
-							onClick={this.facebookLoginClicked}
-							// callback={this.responseFacebook}
-							/>
-						<GoogleLogin
-							clientId="134185819144-0pg827n4l0hdi9vmj70roacbiik8hf0o.apps.googleusercontent.com"
-							buttonText="Login"
-							onSuccess={this.responseGoogle}
-							onFailure={this.responseGoogle}
- 							/>
+						<Card className="card">
+							<CardContent>
+								<h3>Login with one of the following:</h3>
+							</CardContent>
+							<FacebookLogin 
+								className="fb-login"
+								id="facebook-login"
+								appId="2196561480662008"
+								autoLoad={true}
+								fields="name,email,picture"
+								onClick={this.facebookLoginClicked}
+								// callback={this.responseFacebook}
+								/>
+							<GoogleLogin
+								className="google-login"
+								clientId="134185819144-0pg827n4l0hdi9vmj70roacbiik8hf0o.apps.googleusercontent.com"
+								buttonText="Login"
+								onSuccess={this.responseGoogle}
+								onFailure={this.responseGoogle}
+								/>
+						</Card>
 					</div>
-					<h1>Login</h1>
 				</div>
 				: ""}
 
@@ -269,8 +277,7 @@ class App extends React.Component<{}, IState> {
 
 	private responseFacebook = (response: any) => {
 		console.log(response);
-		if (!(response.name === "")) {
-			console.log("ok")
+		if (!(response.name === "")) { // assumes user has logged in if there is a name
 			this.setState({authenticated: true})
 		}
 	}
