@@ -107,12 +107,9 @@ export default class BookList extends React.Component<IProps, {}> {
             },
             method: 'POST'
         }).then((response) => {
-            console.log("------------RESPONSE1----------------")
             console.log(response.text())
-            console.log("------------RESPONSE1 end----------------")
             return response
         }).then((response) => {
-            console.log("------------RESPONSE2----------------")
             console.log(response)
             accessToken = response
         }).catch((error) => {
