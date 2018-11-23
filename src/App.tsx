@@ -1,23 +1,81 @@
 import * as React from 'react';
 import Modal from 'react-responsive-modal';
 import './App.css';
-import BookDetail from './components/BookDetail';
 import BookList from './components/BookList';
 import BookLogo from './bookIcon.png';
-// import * as Webcam from 'react-webcam';
 import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
 import Card from '@material-ui/core/Card';
 import { CardContent } from '@material-ui/core';
+import BookGallery from './components/BookGallery';
+import ChatBot from 'react-simple-chatbot';
+import { ThemeProvider } from 'styled-components';
+import Button from '@material-ui/core/Button';
+import ChatBubbleOutline from '@material-ui/icons/ChatBubbleOutline';
+
+const theme = {
+	background: '#f5f8fb',
+	fontFamily: 'Helvetica Neue',
+	headerBgColor: '#3f51b5',
+	headerFontColor: '#fff',
+	headerFontSize: '20px',
+	botBubbleColor: '#3f51b5',
+	botFontColor: '#fff',
+	userBubbleColor: '#fff',
+	userFontColor: '#4a4a4a',
+};
+
+const steps = [
+	{
+		id: 'help',
+		message: 'What would you like help with?',
+		trigger: 'help-options',
+	},
+	{
+		id: 'help-options',
+		options: [
+			{ value: 1, label: 'What is this web app for?', trigger: 'web-app-purpose' },
+			{ value: 2, label: 'Why can\'t I add/edit the book?', trigger: 'add-edit-help' },
+			{ value: 3, label: 'What does \'Download\' do?', trigger: 'download-help' },
+			{ value: 4, label: 'What does the \'Search By Tags\' search bar do?', trigger: 'search-help' },
+			{ value: 5, label: 'That\'s all, thanks!', trigger: 'end' },
+		],
+	},
+	{
+		id: 'web-app-purpose',
+		message: 'It is a place where you can store books and their information.',
+		trigger: 'help-options',
+	},
+	{
+		id: 'add-edit-help',
+		message: 'Please make sure all the fields are filled in.',
+		trigger: 'help-options',
+	},
+	{
+		id: 'download-help',
+		message: 'It downloads the book cover.',
+		trigger: 'help-options',
+	},
+	{
+		id: 'search-help',
+		message: 'Tags are shown on the right of the book title in the list. You can enter a tag into the search field to find other books with the same tag.',
+		trigger: 'help-options',
+	},
+	{
+		id: 'end',
+		message: 'Good bye!',
+		end: true,
+	},
+];
 
 interface IState {
 	authenticated: boolean,
 	books: any[],
 	currentBook: any,
+	currentBookIndex: any,
 	open: boolean,
-	refCamera: any
 	uploadFileList: any,
-	predictionResult: any,
+	chatbotOpen: any,
 }
 
 class App extends React.Component<{}, IState> {
@@ -27,10 +85,10 @@ class App extends React.Component<{}, IState> {
 			authenticated: false,
 			books: [],
 			currentBook: {"id":0, "title":"Loading ","url":"", "author":"Unknown", "synopsis":"Unavailable", "tags":"⚆ _ ⚆","uploaded":"","width":"0","height":"0"},
+			currentBookIndex: 0,
 			open: false,
-			refCamera: React.createRef(),
 			uploadFileList: null,
-			predictionResult: null,
+			chatbotOpen: false,
 		}     
 		
 		this.fetchBooks("")
@@ -38,28 +96,16 @@ class App extends React.Component<{}, IState> {
 		this.handleFileUpload = this.handleFileUpload.bind(this)
 		this.fetchBooks = this.fetchBooks.bind(this)
 		this.uploadBook = this.uploadBook.bind(this)
-		this.authenticate = this.authenticate.bind(this)	
 		this.responseFacebook = this.responseFacebook.bind(this)
 		this.facebookLoginClicked = this.facebookLoginClicked.bind(this)
 		this.responseGoogle = this.responseGoogle.bind(this)
+		this.toggleChatbot = this.toggleChatbot.bind(this)
 	}
 
 	public render() {
 		const { open } = this.state;
 		return (
 		<div>
-			{/* {(!this.state.authenticated) ?
-				<Modal open={!this.state.authenticated} onClose={this.authenticate} closeOnOverlayClick={false} showCloseIcon={false} center={true}>
-					<Webcam
-						audio={false}
-						screenshotFormat="image/jpeg"
-						ref={this.state.refCamera}
-					/>
-					<div className="row nav-row">
-						<div className="btn btn-primary bottom-button" onClick={this.authenticate}>Login</div>
-					</div>
-				</Modal> : ""} */}
-
 			{/* If the user has not been authenticated */}
 			{(!this.state.authenticated) ?
 				<div>
@@ -103,16 +149,21 @@ class App extends React.Component<{}, IState> {
 						<div className="btn btn-primary btn-action btn-add" onClick={this.onOpenModal}>Add Book</div>
 					</div>
 				</div>
+
 				<div className="container">
 					<div className="row">
-						<div className="col-7">
-							<BookDetail currentBook={this.state.currentBook} />
-						</div>
-						<div className="col-5">
+						<div className="col-12">
 							<BookList books={this.state.books} selectNewBook={this.selectNewBook} searchByTag={this.fetchBooks}/>
 						</div>
+						<div className="col-12">
+							<BookGallery books={this.state.books} currentBookIndex={this.state.currentBookIndex} />
+						</div>
+					</div>
+					<div className="row chatbot-btn-container">
+						<Button className="btn-chatbot" variant="fab" onClick={this.toggleChatbot} color="primary"><ChatBubbleOutline /></Button>
 					</div>
 				</div>
+
 				<Modal open={open} onClose={this.onCloseModal}>
 					<form>
 						<div className="form-group">
@@ -123,12 +174,10 @@ class App extends React.Component<{}, IState> {
 						<div className="form-group">
 							<label>Author</label>
 							<input type="text" className="form-control" id="book-author-input" placeholder="Enter Author" />
-							{/* <small className="form-text text-muted"></small> */}
 						</div>
 						<div className="form-group">
 							<label>Synopsis</label>
 							<input type="text" className="form-control" id="book-synopsis-input" placeholder="Enter Synopsis" />
-							{/* <small className="form-text text-muted"></small> */}
 						</div>
 						<div className="form-group">
 							<label>Tag</label>
@@ -143,6 +192,16 @@ class App extends React.Component<{}, IState> {
 						<button type="button" className="btn" onClick={this.uploadBook}>Upload</button>
 					</form>
 				</Modal>
+
+				{(this.state.chatbotOpen) &&
+					<div className="chatbot-container">
+						<ThemeProvider theme={theme}>
+							<ChatBot
+								steps = {steps}
+							/>
+						</ThemeProvider>
+					</div>
+				}
 			</div>
 			: ""}
 		</div>
@@ -152,7 +211,7 @@ class App extends React.Component<{}, IState> {
 	// Modal open
 	private onOpenModal = () => {
 		this.setState({ open: true });
-	  };
+	};
 	
 	// Modal close
 	private onCloseModal = () => {
@@ -160,9 +219,9 @@ class App extends React.Component<{}, IState> {
 	};
 	
 	// Change selected book
-	private selectNewBook(newBook: any) {
+	private selectNewBook(newBookIndex: any) {
 		this.setState({
-			currentBook: newBook
+			currentBookIndex: newBookIndex,
 		})
 	}
 
@@ -235,46 +294,6 @@ class App extends React.Component<{}, IState> {
 		  })
 	}
 
-	// Authenticate
-	private authenticate() { 
-		const screenshot = this.state.refCamera.current.getScreenshot();
-		this.getFaceRecognitionResult(screenshot);
-	}
-
-	// Call custom vision model
-	private getFaceRecognitionResult(image: string) {
-		const url = "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/fd849982-e2f2-4fe7-a8d9-94c0d78fed33/image?iterationId=e6b960fa-4ea5-42dc-9f7d-df3b64bb8c2e"
-		if (image === null) {
-			return;
-		}
-		const base64 = require('base64-js');
-		const base64content = image.split(";")[1].split(",")[1]
-		const byteArray = base64.toByteArray(base64content);
-		fetch(url, {
-			body: byteArray,
-			headers: {
-				'cache-control': 'no-cache', 'Prediction-Key': '238994037e3e4ebabe32c0093e59d168', 'Content-Type': 'application/octet-stream'
-			},
-			method: 'POST'
-		})
-		.then((response: any) => {
-			if (!response.ok) {
-				// Error State
-				alert(response.statusText)
-			} else {
-				response.json().then((json: any) => {
-					console.log(json.predictions[0])
-					this.setState({predictionResult: json.predictions[0] })
-					if (this.state.predictionResult.probability > 0.7) {
-						this.setState({authenticated: true})
-					} else {
-						this.setState({authenticated: false})
-					}
-				})
-			}
-		})
-	}
-
 	private responseFacebook = (response: any) => {
 		console.log(response);
 		if (!(response.name === "")) { // assumes user has logged in if there is a name
@@ -288,6 +307,10 @@ class App extends React.Component<{}, IState> {
 
 	private responseGoogle = (response: any) => {
 		console.log(response);
+	}
+
+	private toggleChatbot() {
+		this.setState({ chatbotOpen: !(this.state.chatbotOpen) })
 	}
 }
 

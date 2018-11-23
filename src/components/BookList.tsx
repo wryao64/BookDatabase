@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import MediaStreamRecorder from 'msr';
 
 interface IProps {
@@ -61,7 +61,7 @@ export default class BookList extends React.Component<IProps, {}> {
     private selectRow(index: any) {
         const selectedBook = this.props.books[index]
         if (selectedBook != null) {
-            this.props.selectNewBook(selectedBook)
+            this.props.selectNewBook(index)
         }
     }
 
