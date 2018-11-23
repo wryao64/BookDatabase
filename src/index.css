@@ -48,7 +48,6 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #eeeeee;
   overflow: hidden;
 }
 
@@ -68,11 +67,10 @@ body{
 
 .book-done-button {
   display: flex;
-  align-items: left;
+  align-items: center;
   justify-content: left;
   font-weight: normal;
   font-size: 20px;
-  margin-top: 40px;
 }
 
 .btn-action{
@@ -122,7 +120,14 @@ body{
   right: 0px;
 }
 
+.btn-previous {
+  position: absolute;
+  left: 0px;
+}
+
 .buttons {
+  align-items: center;
+  justify-content: center;
   margin-top: 2%;
 }
 
