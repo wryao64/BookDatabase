@@ -111,6 +111,7 @@ body{
   margin-top: 20px;
   /* height: calc(100vh - 140px); */
   height: 50%;
+  max-height: 240px;
   overflow-y: scroll;
   cursor: pointer;
 }
