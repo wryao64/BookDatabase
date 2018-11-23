@@ -28,16 +28,38 @@ const theme = {
 const steps = [
 	{
 		id: 'help',
-		message: 'What would like help with?',
+		message: 'What would you like help with?',
 		trigger: 'help-options',
 	},
 	{
 		id: 'help-options',
 		options: [
-			{ value: 1, label: '#1', trigger: 'help-options' },
-			{ value: 2, label: '#2', trigger: 'help-options' },
-			{ value: 3, label: 'That\'s all', trigger: 'end' },
+			{ value: 1, label: 'What is this web app for?', trigger: 'web-app-purpose' },
+			{ value: 2, label: 'Why can\'t I add/edit the book?', trigger: 'add-edit-help' },
+			{ value: 3, label: 'What does \'Download\' do?', trigger: 'download-help' },
+			{ value: 4, label: 'What does the \'Search By Tags\' search bar do?', trigger: 'search-help' },
+			{ value: 5, label: 'That\'s all, thanks!', trigger: 'end' },
 		],
+	},
+	{
+		id: 'web-app-purpose',
+		message: 'It is a place where you can store books and their information.',
+		trigger: 'help-options',
+	},
+	{
+		id: 'add-edit-help',
+		message: 'Please make sure all the fields are filled in.',
+		trigger: 'help-options',
+	},
+	{
+		id: 'download-help',
+		message: 'It downloads the book cover.',
+		trigger: 'help-options',
+	},
+	{
+		id: 'search-help',
+		message: 'Tags are shown on the right of the book title in the list. You can enter a tag into the search field to find other books with the same tag.',
+		trigger: 'help-options',
 	},
 	{
 		id: 'end',

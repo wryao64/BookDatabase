@@ -154,6 +154,7 @@ body{
 }
 
 .chatbot-container {
+  color: #fff;
   position: absolute;
   right: 75px;
   top: 72px;
