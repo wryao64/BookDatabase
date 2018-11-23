@@ -137,13 +137,7 @@ export default class BookGallery extends React.Component<IProps,IState> {
 		const synopsisInput = document.getElementById("book-edit-synopsis-input") as HTMLInputElement
         const tagInput = document.getElementById("book-edit-tag-input") as HTMLInputElement
 
-        console.log(titleInput)
-        console.log(authorInput)
-        console.log(synopsisInput)
-        console.log(tagInput)
-
         if (titleInput === null || authorInput === null || synopsisInput === null || tagInput === null) {
-            console.log("Null")
             return;
 		}
 
@@ -169,7 +163,6 @@ export default class BookGallery extends React.Component<IProps,IState> {
 			method: 'PUT'
 		})
         .then((response : any) => {
-            console.log("updateBook response?")
 			if (!response.ok) {
 				// Error State
 				alert(response.statusText + " " + url)
