@@ -151,6 +151,6 @@ export default class BookDetail extends React.Component<IProps, IState> {
 			} else {
 				location.reload()
 			}
-		  })
+        })
     }
 }
