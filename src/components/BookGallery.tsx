@@ -34,16 +34,17 @@ export default class BookGallery extends React.Component<IProps,IState> {
                     <div className="btn btn-primary btn-action" onClick={this.deleteBook.bind(this, bookList[index].id)}>Delete </div>
                 </div>
 
+                <div className="row buttons">
+                    <div className="btn btn-primary btn-action" onClick={this.changeBook.bind(this, -1)}>Previous</div>&nbsp;
+                    <div className="btn btn-primary btn-action btn-next" onClick={this.changeBook.bind(this, 1)}>Next</div>
+                </div>
+
                 <div className="container book-wrapper">
                     <div className="row book-heading">
                         <b>{bookList[index].title}</b>&nbsp; ({bookList[index].tags})
                     </div>
                     <div className="row book-img">
                         <img id="book-img" src={bookList[index].url}/>
-                    </div>
-                    <div className="row buttons">
-						<div className="btn btn-primary btn-action" onClick={this.changeBook.bind(this, -1)}>Previous</div>&nbsp;
-						<div className="btn btn-primary btn-action" onClick={this.changeBook.bind(this, 1)}>Next</div>
                     </div>
                 </div>
 

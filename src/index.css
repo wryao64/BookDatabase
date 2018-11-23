@@ -110,6 +110,15 @@ body{
 }
 
 /** Login page **/
+.btn-next {
+  position: absolute;
+  right: 0px;
+}
+
+.buttons {
+  margin-top: 2%;
+}
+
 .card {
   align-items: center;
   justify-content: left;
