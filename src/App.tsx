@@ -1,10 +1,8 @@
 import * as React from 'react';
 import Modal from 'react-responsive-modal';
 import './App.css';
-// import BookDetail from './components/BookDetail';
 import BookList from './components/BookList';
 import BookLogo from './bookIcon.png';
-// import * as Webcam from 'react-webcam';
 import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
 import Card from '@material-ui/core/Card';
@@ -15,10 +13,9 @@ interface IState {
 	authenticated: boolean,
 	books: any[],
 	currentBook: any,
+	currentBookIndex: any,
 	open: boolean,
-	refCamera: any
 	uploadFileList: any,
-	predictionResult: any,
 }
 
 class App extends React.Component<{}, IState> {
@@ -28,10 +25,9 @@ class App extends React.Component<{}, IState> {
 			authenticated: false,
 			books: [],
 			currentBook: {"id":0, "title":"Loading ","url":"", "author":"Unknown", "synopsis":"Unavailable", "tags":"⚆ _ ⚆","uploaded":"","width":"0","height":"0"},
+			currentBookIndex: 0,
 			open: false,
-			refCamera: React.createRef(),
 			uploadFileList: null,
-			predictionResult: null,
 		}     
 		
 		this.fetchBooks("")
@@ -39,7 +35,6 @@ class App extends React.Component<{}, IState> {
 		this.handleFileUpload = this.handleFileUpload.bind(this)
 		this.fetchBooks = this.fetchBooks.bind(this)
 		this.uploadBook = this.uploadBook.bind(this)
-		this.authenticate = this.authenticate.bind(this)	
 		this.responseFacebook = this.responseFacebook.bind(this)
 		this.facebookLoginClicked = this.facebookLoginClicked.bind(this)
 		this.responseGoogle = this.responseGoogle.bind(this)
@@ -49,18 +44,6 @@ class App extends React.Component<{}, IState> {
 		const { open } = this.state;
 		return (
 		<div>
-			{/* {(!this.state.authenticated) ?
-				<Modal open={!this.state.authenticated} onClose={this.authenticate} closeOnOverlayClick={false} showCloseIcon={false} center={true}>
-					<Webcam
-						audio={false}
-						screenshotFormat="image/jpeg"
-						ref={this.state.refCamera}
-					/>
-					<div className="row nav-row">
-						<div className="btn btn-primary bottom-button" onClick={this.authenticate}>Login</div>
-					</div>
-				</Modal> : ""} */}
-
 			{/* If the user has not been authenticated */}
 			{(!this.state.authenticated) ?
 				<div>
@@ -107,14 +90,11 @@ class App extends React.Component<{}, IState> {
 
 				<div className="container">
 					<div className="row">
-						{/* <div className="col-7">
-							<BookDetail currentBook={this.state.currentBook} />
-						</div> */}
 						<div className="col-12">
 							<BookList books={this.state.books} selectNewBook={this.selectNewBook} searchByTag={this.fetchBooks}/>
 						</div>
 						<div className="col-12">
-							<BookGallery books={this.state.books}/>
+							<BookGallery books={this.state.books} currentBookIndex={this.state.currentBookIndex} />
 						</div>
 					</div>
 				</div>
@@ -129,12 +109,10 @@ class App extends React.Component<{}, IState> {
 						<div className="form-group">
 							<label>Author</label>
 							<input type="text" className="form-control" id="book-author-input" placeholder="Enter Author" />
-							{/* <small className="form-text text-muted"></small> */}
 						</div>
 						<div className="form-group">
 							<label>Synopsis</label>
 							<input type="text" className="form-control" id="book-synopsis-input" placeholder="Enter Synopsis" />
-							{/* <small className="form-text text-muted"></small> */}
 						</div>
 						<div className="form-group">
 							<label>Tag</label>
@@ -158,7 +136,7 @@ class App extends React.Component<{}, IState> {
 	// Modal open
 	private onOpenModal = () => {
 		this.setState({ open: true });
-	  };
+	};
 	
 	// Modal close
 	private onCloseModal = () => {
@@ -166,9 +144,9 @@ class App extends React.Component<{}, IState> {
 	};
 	
 	// Change selected book
-	private selectNewBook(newBook: any) {
+	private selectNewBook(newBookIndex: any) {
 		this.setState({
-			currentBook: newBook
+			currentBookIndex: newBookIndex,
 		})
 	}
 
@@ -239,46 +217,6 @@ class App extends React.Component<{}, IState> {
 				location.reload()
 			}
 		  })
-	}
-
-	// Authenticate
-	private authenticate() { 
-		const screenshot = this.state.refCamera.current.getScreenshot();
-		this.getFaceRecognitionResult(screenshot);
-	}
-
-	// Call custom vision model
-	private getFaceRecognitionResult(image: string) {
-		const url = "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/fd849982-e2f2-4fe7-a8d9-94c0d78fed33/image?iterationId=e6b960fa-4ea5-42dc-9f7d-df3b64bb8c2e"
-		if (image === null) {
-			return;
-		}
-		const base64 = require('base64-js');
-		const base64content = image.split(";")[1].split(",")[1]
-		const byteArray = base64.toByteArray(base64content);
-		fetch(url, {
-			body: byteArray,
-			headers: {
-				'cache-control': 'no-cache', 'Prediction-Key': '238994037e3e4ebabe32c0093e59d168', 'Content-Type': 'application/octet-stream'
-			},
-			method: 'POST'
-		})
-		.then((response: any) => {
-			if (!response.ok) {
-				// Error State
-				alert(response.statusText)
-			} else {
-				response.json().then((json: any) => {
-					console.log(json.predictions[0])
-					this.setState({predictionResult: json.predictions[0] })
-					if (this.state.predictionResult.probability > 0.7) {
-						this.setState({authenticated: true})
-					} else {
-						this.setState({authenticated: false})
-					}
-				})
-			}
-		})
 	}
 
 	private responseFacebook = (response: any) => {

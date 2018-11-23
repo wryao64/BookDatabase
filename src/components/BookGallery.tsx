@@ -3,6 +3,7 @@ import Modal from 'react-responsive-modal';
 
 interface IProps {
     books: any[]
+    currentBookIndex: any
 }
 
 interface IState {
@@ -15,15 +16,16 @@ export default class BookGallery extends React.Component<IProps,IState> {
         super(props)
         this.state = {
             index: 0,
-            open: false
+            open: false,
         }
         this.updateBook = this.updateBook.bind(this)
     }
 
     public render() {
-		const { open } = this.state;
+		const { open } = this.state
         const bookList = this.props.books
-        const { index } = this.state;
+        const { index } = this.state
+
         return (
             <div className="container book-gallery-wrapper">
                 <div className="row book-done-button">
@@ -83,6 +85,7 @@ export default class BookGallery extends React.Component<IProps,IState> {
         } else {
             this.setState({ index: index + inc })
         }
+        // this.setState({ currentBook: bookList[index]})
     }
 
     // Modal Open
