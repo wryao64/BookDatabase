@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Modal from 'react-responsive-modal';
 import './App.css';
-import BookDetail from './components/BookDetail';
+// import BookDetail from './components/BookDetail';
 import BookList from './components/BookList';
 import BookLogo from './bookIcon.png';
 // import * as Webcam from 'react-webcam';
@@ -9,6 +9,7 @@ import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
 import Card from '@material-ui/core/Card';
 import { CardContent } from '@material-ui/core';
+import BookGallery from './components/BookGallery';
 
 interface IState {
 	authenticated: boolean,
@@ -103,16 +104,21 @@ class App extends React.Component<{}, IState> {
 						<div className="btn btn-primary btn-action btn-add" onClick={this.onOpenModal}>Add Book</div>
 					</div>
 				</div>
+
 				<div className="container">
 					<div className="row">
-						<div className="col-7">
+						{/* <div className="col-7">
 							<BookDetail currentBook={this.state.currentBook} />
-						</div>
-						<div className="col-5">
+						</div> */}
+						<div className="col-12">
 							<BookList books={this.state.books} selectNewBook={this.selectNewBook} searchByTag={this.fetchBooks}/>
+						</div>
+						<div className="col-12">
+							<BookGallery books={this.state.books}/>
 						</div>
 					</div>
 				</div>
+
 				<Modal open={open} onClose={this.onCloseModal}>
 					<form>
 						<div className="form-group">

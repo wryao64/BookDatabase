@@ -31,7 +31,7 @@ export default class BookDetail extends React.Component<IProps, IState> {
                     <b>{currentBook.author}</b>
                 </div>
                 <div className="row book-synopsis">
-                    <b>{currentBook.synopsis}</b>
+                    {currentBook.synopsis}
                 </div>
                 <div className="row book-date">
                     {currentBook.uploaded}
