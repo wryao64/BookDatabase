@@ -28,15 +28,15 @@ export default class BookGallery extends React.Component<IProps,IState> {
 
         return (
             <div className="container book-gallery-wrapper">
+                <div className="row buttons">
+                    <div className="btn btn-primary btn-action" onClick={this.changeBook.bind(this, -1)}>Previous</div>&nbsp;
+                    <div className="btn btn-primary btn-action btn-next" onClick={this.changeBook.bind(this, 1)}>Next</div>
+                </div>
+
                 <div className="row book-done-button">
                     <div className="btn btn-primary btn-action" onClick={this.downloadBook.bind(this, bookList[index].url)}>Download </div>
                     <div className="btn btn-primary btn-action" onClick={this.onOpenModal}>Edit </div>
                     <div className="btn btn-primary btn-action" onClick={this.deleteBook.bind(this, bookList[index].id)}>Delete </div>
-                </div>
-
-                <div className="row buttons">
-                    <div className="btn btn-primary btn-action" onClick={this.changeBook.bind(this, -1)}>Previous</div>&nbsp;
-                    <div className="btn btn-primary btn-action btn-next" onClick={this.changeBook.bind(this, 1)}>Next</div>
                 </div>
 
                 <div className="container book-wrapper">

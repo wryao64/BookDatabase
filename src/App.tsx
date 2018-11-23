@@ -9,8 +9,42 @@ import Card from '@material-ui/core/Card';
 import { CardContent } from '@material-ui/core';
 import BookGallery from './components/BookGallery';
 import ChatBot from 'react-simple-chatbot';
+import { ThemeProvider } from 'styled-components';
 import Button from '@material-ui/core/Button';
 import ChatBubbleOutline from '@material-ui/icons/ChatBubbleOutline';
+
+const theme = {
+	background: '#f5f8fb',
+	fontFamily: 'Helvetica Neue',
+	headerBgColor: '#3f51b5',
+	headerFontColor: '#fff',
+	headerFontSize: '15px',
+	botBubbleColor: '#3f51b5',
+	botFontColor: '#fff',
+	userBubbleColor: '#fff',
+	userFontColor: '#4a4a4a',
+};
+
+const steps = [
+	{
+		id: 'help',
+		message: 'What would like help with?',
+		trigger: 'help-options',
+	},
+	{
+		id: 'help-options',
+		options: [
+			{ value: 1, label: '#1', trigger: 'help-options' },
+			{ value: 2, label: '#2', trigger: 'help-options' },
+			{ value: 3, label: 'That\'s all', trigger: 'end' },
+		],
+	},
+	{
+		id: 'end',
+		message: 'Good bye!',
+		end: true,
+	},
+];
 
 interface IState {
 	authenticated: boolean,
@@ -139,28 +173,11 @@ class App extends React.Component<{}, IState> {
 
 				{(this.state.chatbotOpen) &&
 					<div className="chatbot-container">
-						<ChatBot
-							steps={[
-								{
-									id: 'help',
-									message: 'What would like help with?',
-									trigger: 'help-options',
-								},
-								{
-									id: 'help-options',
-									options: [
-										{ value: 1, label: '#1', trigger: 'help-options' },
-										{ value: 2, label: '#2', trigger: 'help-options' },
-										{ value: 3, label: 'That\'s all', trigger: 'end' },
-									],
-								},
-								{
-									id: 'end',
-									message: 'Good bye!',
-									end: true,
-								},
-							]}
-						/>
+						<ThemeProvider theme={theme}>
+							<ChatBot
+								steps = {steps}
+							/>
+						</ThemeProvider>
 					</div>
 				}
 			</div>

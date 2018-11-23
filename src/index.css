@@ -23,6 +23,7 @@ body{
 
 /* Selected Book */
 .book-wrapper {
+  margin-bottom: 40px;
   padding-top:20px;
   padding-left: 30px;
   padding-right: 30px;
@@ -34,6 +35,12 @@ body{
   justify-content: left;
   font-weight: normal;
   font-size: 18px;
+}
+
+.book-synopsis {
+  margin-top: 20px;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 .book-img {
@@ -65,13 +72,13 @@ body{
   justify-content: left;
   font-weight: normal;
   font-size: 20px;
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 .btn-action{
   font-family: Helvetica;
-  background-color:#f5a623;
-  border-color: #f5a623;
+  background-color:#3f51b5;
+  border-color: #3f51b5;
   height:40px;
   margin-right: 10px;
   font-size:18px;
@@ -81,8 +88,8 @@ body{
 }
 
 .btn-action:hover {
-  background-color: #d18c1b;
-  border-color: #d18c1b;
+  background-color: #2c387e;
+  border-color: #2c387e;
 }
 
 .btn-add {
