@@ -8,6 +8,9 @@ import GoogleLogin from 'react-google-login';
 import Card from '@material-ui/core/Card';
 import { CardContent } from '@material-ui/core';
 import BookGallery from './components/BookGallery';
+import ChatBot from 'react-simple-chatbot';
+import Button from '@material-ui/core/Button';
+import ChatBubbleOutline from '@material-ui/icons/ChatBubbleOutline';
 
 interface IState {
 	authenticated: boolean,
@@ -16,6 +19,7 @@ interface IState {
 	currentBookIndex: any,
 	open: boolean,
 	uploadFileList: any,
+	chatbotOpen: any,
 }
 
 class App extends React.Component<{}, IState> {
@@ -28,6 +32,7 @@ class App extends React.Component<{}, IState> {
 			currentBookIndex: 0,
 			open: false,
 			uploadFileList: null,
+			chatbotOpen: false,
 		}     
 		
 		this.fetchBooks("")
@@ -38,6 +43,7 @@ class App extends React.Component<{}, IState> {
 		this.responseFacebook = this.responseFacebook.bind(this)
 		this.facebookLoginClicked = this.facebookLoginClicked.bind(this)
 		this.responseGoogle = this.responseGoogle.bind(this)
+		this.toggleChatbot = this.toggleChatbot.bind(this)
 	}
 
 	public render() {
@@ -97,6 +103,9 @@ class App extends React.Component<{}, IState> {
 							<BookGallery books={this.state.books} currentBookIndex={this.state.currentBookIndex} />
 						</div>
 					</div>
+					<div className="row chatbot-btn-container">
+						<Button className="btn-chatbot" variant="fab" onClick={this.toggleChatbot} color="primary"><ChatBubbleOutline /></Button>
+					</div>
 				</div>
 
 				<Modal open={open} onClose={this.onCloseModal}>
@@ -127,6 +136,33 @@ class App extends React.Component<{}, IState> {
 						<button type="button" className="btn" onClick={this.uploadBook}>Upload</button>
 					</form>
 				</Modal>
+
+				{(this.state.chatbotOpen) &&
+					<div className="chatbot-container">
+						<ChatBot
+							steps={[
+								{
+									id: 'help',
+									message: 'What would like help with?',
+									trigger: 'help-options',
+								},
+								{
+									id: 'help-options',
+									options: [
+										{ value: 1, label: '#1', trigger: 'help-options' },
+										{ value: 2, label: '#2', trigger: 'help-options' },
+										{ value: 3, label: 'That\'s all', trigger: 'end' },
+									],
+								},
+								{
+									id: 'end',
+									message: 'Good bye!',
+									end: true,
+								},
+							]}
+						/>
+					</div>
+				}
 			</div>
 			: ""}
 		</div>
@@ -232,6 +268,10 @@ class App extends React.Component<{}, IState> {
 
 	private responseGoogle = (response: any) => {
 		console.log(response);
+	}
+
+	private toggleChatbot() {
+		this.setState({ chatbotOpen: !(this.state.chatbotOpen) })
 	}
 }
 

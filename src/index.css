@@ -127,6 +127,18 @@ body{
   width: 50%;
 }
 
+.chatbot-btn-container {
+  position: absolute;
+  right: 2%;
+  top: 72px;
+}
+
+.chatbot-container {
+  position: absolute;
+  right: 75px;
+  top: 72px;
+}
+
 .fb-login,
 .google-login {
   margin: 2%;
