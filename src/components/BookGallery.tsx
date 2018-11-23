@@ -43,8 +43,17 @@ export default class BookGallery extends React.Component<IProps,IState> {
                     <div className="row book-heading">
                         <b>{bookList[index].title}</b>&nbsp; ({bookList[index].tags})
                     </div>
+                    <div className="row book-author">
+                        {bookList[index].author}
+                    </div>
+                    <div className="row book-date">
+                        {bookList[index].uploaded}
+                    </div>
                     <div className="row book-img">
                         <img id="book-img" src={bookList[index].url}/>
+                    </div>
+                    <div className="row book-synopsis">
+                        {bookList[index].synopsis}
                     </div>
                 </div>
 
