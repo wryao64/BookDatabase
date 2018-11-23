@@ -52,15 +52,17 @@ export default class BookGallery extends React.Component<IProps,IState> {
         const bookList = this.props.books
         const { index } = this.state
         // const imageItem = document.getElementById("book-img")
-        this.setState({ index: index + inc })
         console.log(index)
 
-        if (index > bookList.length - 2) {
+        if (index === bookList.length - 1) {
             console.log("1. index: ", index)
             this.setState({ index: 0 })
-        } else if (index < 0) {
+        } else if (index === 0 && inc === -1) {
             console.log("2. index: ", index)
-            this.setState({ index: bookList.length - 2 })
+            this.setState({ index: bookList.length - 1 })
+        } else {
+            console.log("3. index: ", index)
+            this.setState({ index: index + inc })
         }
     }
 }
